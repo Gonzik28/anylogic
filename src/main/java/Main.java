@@ -3,18 +3,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class Main {
     private static final double PERCENTILE = 90.00;
 
     public static void main(String[] args) throws IOException, ParseException {
-        File jsonFile = new File("src/main/resources/tickets.json");
+        InputStream is = Main.class.getClassLoader().getResourceAsStream("tickets.json");
+        InputStreamReader reader = new InputStreamReader(is);
         JSONParser parser = new JSONParser();
-        JSONObject object = (JSONObject) parser.parse(new FileReader(jsonFile));
+        JSONObject object = (JSONObject) parser.parse(reader);
         JSONArray ticketsArray = (JSONArray) object.get("tickets");
         List<Ticket> ticketList = Parse.parseTickets(ticketsArray);
         TimeFly.avgTime(ticketList);
